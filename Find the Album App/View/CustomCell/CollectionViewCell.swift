@@ -19,7 +19,6 @@ class CollectionViewCell: UICollectionViewCell {
     }()
     
     fileprivate let activityIndicator: UIActivityIndicatorView = {
-       
         let indicator = UIActivityIndicatorView()
         indicator.translatesAutoresizingMaskIntoConstraints = false
         return indicator
@@ -28,7 +27,7 @@ class CollectionViewCell: UICollectionViewCell {
     fileprivate let albumTitle: UILabel = {
         let textLabel = UILabel()
         textLabel.translatesAutoresizingMaskIntoConstraints = false
-        textLabel.tintColor = .textAlbumName()
+        textLabel.textColor = .textAlbumName()
         textLabel.textAlignment = .center
         textLabel.font = UIFont.systemFont(ofSize: 20)
         return textLabel
@@ -37,7 +36,6 @@ class CollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         layer.cornerRadius = 20
-        layer.masksToBounds = true
         setupViews()
         setupConstraints()
     }
@@ -49,15 +47,12 @@ class CollectionViewCell: UICollectionViewCell {
         DispatchQueue.global(qos: .utility).async {
             let data = try? Data(contentsOf: image)
             if let data = data {
-        DispatchQueue.main.async { [weak self] in
-                self?.albumPoster.image = UIImage(data: data)
-                self?.activityIndicator.stopAnimating()
-                self?.activityIndicator.isHidden = true
-            }
-            
-            
-        }}
-        
+                DispatchQueue.main.async { [weak self] in
+                    self?.albumPoster.image = UIImage(data: data)
+                    self?.activityIndicator.stopAnimating()
+                    self?.activityIndicator.isHidden = true
+                }
+            }}
     }
     
     func setupViews() {
@@ -70,7 +65,7 @@ class CollectionViewCell: UICollectionViewCell {
         NSLayoutConstraint.activate([
             albumPoster.topAnchor.constraint(equalTo: contentView.topAnchor),
             albumPoster.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            albumPoster.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            albumPoster.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
         ])
         
         NSLayoutConstraint.activate([
@@ -87,9 +82,9 @@ class CollectionViewCell: UICollectionViewCell {
             activityIndicator.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             activityIndicator.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
-
+        
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

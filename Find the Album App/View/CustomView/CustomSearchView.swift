@@ -11,7 +11,7 @@ class CustomSearchView: UIView, UICollectionViewDelegate {
     
     private let estimateWidth  = 160.0
     private let cellMarginSize = 16.0
-    let viewController = SearchViewController()
+
     var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -23,6 +23,12 @@ class CustomSearchView: UIView, UICollectionViewDelegate {
         return cv
     }()
     
+    fileprivate let activityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView()
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        return indicator
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
@@ -32,16 +38,30 @@ class CustomSearchView: UIView, UICollectionViewDelegate {
     
     func setupViews() {
         addSubview(collectionView)
+        addSubview(activityIndicator)
+    }
+    
+    func showLoader() {
+        activityIndicator.startAnimating()
+    }
+    
+    func hideLoader() {
+        activityIndicator.stopAnimating()
+        activityIndicator.isHidden = true
     }
     
     func setupConstraints() {
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = .mainWhite()
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: self.topAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+            collectionView.topAnchor.constraint(equalTo: topAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor)
+        ])
+        
+        NSLayoutConstraint.activate([
+            activityIndicator.centerXAnchor.constraint(equalTo: centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
     }
     

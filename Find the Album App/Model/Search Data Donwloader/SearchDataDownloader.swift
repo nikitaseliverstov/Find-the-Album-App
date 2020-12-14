@@ -11,8 +11,8 @@ final class SearchDataDownloader {
     
     let soad = "https://itunes.apple.com/search?term=A&entity=album&attribute=albumTerm&limit=100"
 
-    func downloadSearchData(completionHandler: @escaping ([AlbumSearchData]) -> Void) throws {
-        guard let url = URL(string: soad) else {
+    func downloadSearchData(url: String, completionHandler: @escaping ([AlbumSearchData]) -> Void) throws {
+        guard let url = URL(string: url) else {
             throw Mistakes.iTunesUrlIsEmpty
         }
         

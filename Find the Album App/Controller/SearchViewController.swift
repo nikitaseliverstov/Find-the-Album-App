@@ -10,6 +10,7 @@ import UIKit
 class SearchViewController: GenericCustomViewController<CustomSearchView> {
     
     let searchController = UISearchController(searchResultsController: nil)
+    private var timer: Timer?
     private var searchDataArray = [AlbumSearchData]()
     private let searchDataDownloader = SearchDataDownloader()
     
@@ -29,7 +30,7 @@ class SearchViewController: GenericCustomViewController<CustomSearchView> {
     }
     
     private func downloadMovieData() {
-        do{ try searchDataDownloader.downloadSearchData { [weak self] searchData in
+        do{ try searchDataDownloader.downloadSearchData(url: .iTunesUrl) { [weak self] searchData in
             self?.searchDataArray = searchData
             self?.customView.collectionView.reloadData()
             }
@@ -56,10 +57,30 @@ extension SearchViewController: UICollectionViewDataSource {
         }
         return cell
     }
+    
+    
 }
 
 extension SearchViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        customView.showLoader()
         print(searchText)
+        
+        let iTunesSearchUrl = "https://itunes.apple.com/search?term=\(searchText.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)&entity=album&attribute=albumTerm&limit=10"
+        print(iTunesSearchUrl)
+        
+        timer?.invalidate()
+        timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: { (_) in
+            do { try self.searchDataDownloader.downloadSearchData(url: iTunesSearchUrl) { [weak self] searchData in
+                self?.searchDataArray = searchData
+                self?.customView.collectionView.reloadData()
+                self?.customView.hideLoader()
+                }
+            } catch {
+                print("URL is missing")
+            }
+        })
+        
+        
     }
 }
