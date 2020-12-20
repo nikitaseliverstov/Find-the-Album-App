@@ -35,6 +35,8 @@ final class SearchViewController: GenericClassForViewControllers<SearchView> {
         navigationController?.navigationBar.prefersLargeTitles = true
         if #available(iOS 13, *) {
             navigationController?.overrideUserInterfaceStyle = .light
+        } else {
+            searchController.hidesNavigationBarDuringPresentation = false
         }
         navigationItem.largeTitleDisplayMode =  .always
         searchController.obscuresBackgroundDuringPresentation = false
